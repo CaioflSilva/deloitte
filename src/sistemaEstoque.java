@@ -1,125 +1,91 @@
-import java.util.ArrayList;
 import java.util.Scanner;
 
-public class sistemaEstoque {
-
+class sistemaEstoque {
 
     public static void main(String[] args) {
 
-
         Scanner scanner = new Scanner(System.in);
-        ArrayList<String> estoque = new ArrayList<>();
+        Estoque estoque = new Estoque();
 
         int opcao;
         int id = 1;
 
         do {
 
+            System.out.println("======= Sistema de Estoque =========");
+            System.out.println("1 - Cadastrar Produto");
+            System.out.println("2 - Listar Produtos");
+            System.out.println("3 - Alterar Produto");
+            System.out.println("4 - Remover Produto");
+            System.out.println("0 - Sair");
+            System.out.print("Escolha: ");
 
-            System.out.println("=======   Sistema de Estoque  =========");
-
-            System.out.println("1 Cadastrar Produtos ");
-            System.out.println("2 Listar Produtos ");
-            System.out.println("3 Alterar Produtos ");
-            System.out.println("4 Remover Produtos ");
-            System.out.println("0 Sair");
-            System.out.println("Escolha");
             opcao = scanner.nextInt();
-            scanner.nextLine();
-
+            scanner.nextLine();  //  quebra de linha
 
             switch (opcao) {
+
                 case 1:
-                    System.out.println("Nome:");
+                    // Cadastrar Produto
+                    System.out.print("Nome: ");
                     String nome = scanner.nextLine();
 
-                    System.out.println("Preço");
-                    double preco = scanner.nextDouble();
+                    System.out.print("Preço: ");
+                    double preco = Double.parseDouble(scanner.nextLine());
 
-                    System.out.println("Quantidade");
-                    int quantidade = scanner.nextInt();
-                    scanner.nextLine();
+                    System.out.print("Quantidade: ");
+                    int quantidade = Integer.parseInt(scanner.nextLine());
 
-                    String produto = "ID" + id +
-                            "|Nome: " + nome +
-                            "| preço R$ " + preco +
-                            "| Quantidade  " + quantidade;
-
-                    estoque.add(produto);
+                    Produto produto = new Produto(id, nome, preco, quantidade);
+                    estoque.adicionarProduto(produto);
                     id++;
 
-                    System.out.println("Produto Cadastrado com sucesso");
+                    System.out.println("Produto cadastrado!");
                     break;
 
                 case 2:
-                    System.out.println("----- Lista De Produtos");
-
-                    for (int i = 0; i < estoque.size(); i++) {
-                        System.out.println(i + " - " + estoque.get(i));
-                    }
-
+                    // Listar Produtos
+                    estoque.listarProdutos();
                     break;
 
                 case 3:
-                    System.out.println("Digite o indice para Alterar");
+                    // Alterar Produto
+                    System.out.print("Índice do produto: ");
+                    int indice = scanner.nextInt();
+                    scanner.nextLine();  // quebra de linha
 
-                    int indiceAlterar = scanner.nextInt();
-                    scanner.nextLine();
+                    System.out.print("Novo nome: ");
+                    String novoNome = scanner.nextLine();
 
-                    if (indiceAlterar >= 0 && indiceAlterar < estoque.size()) {
-                        System.out.println("Nome novo");
-                        String novoNome = scanner.nextLine();
+                    System.out.print("Novo preço: ");
+                    double novoPreco = Double.parseDouble(scanner.nextLine());
 
-                        System.out.println("Novo Preço");
-                        double novoPreco = scanner.nextDouble();
+                    System.out.print("Nova quantidade: ");
+                    int novaQuantidade = Integer.parseInt(scanner.nextLine());
 
-                        System.out.println("Nova Quantidade");
-                        int novaQuantidade = scanner.nextInt();
-                        scanner.nextLine();
-
-                        String novoProduto = "ID" + (indiceAlterar + 1) +
-
-                                "|Nome" + novoNome +
-                                "|Preço: R$ " + novoPreco +
-                                "|Quantidade " + novaQuantidade;
-                        estoque.set(indiceAlterar, novoProduto);
-
-                        System.out.println("Produto atualizado!");
-                    } else {
-                        System.out.println("Indice invalido");
-                    }
+                    estoque.alterarProduto(indice, novoNome, novoPreco, novaQuantidade);
                     break;
 
                 case 4:
-                    System.out.println("Digite o indice para Remover");
+                    // Remover Produto
+                    System.out.print("Índice para remover: ");
                     int indiceRemover = scanner.nextInt();
+                    scanner.nextLine();  // quebra de linha
 
-                    if (indiceRemover >= 0 && indiceRemover < estoque.size()) {
-                        estoque.remove((indiceRemover));
-                        System.out.println("Produto Removido!");
-                    } else {
-                        System.out.println("Indice invalido");
-                    }
+                    estoque.removerProduto(indiceRemover);
                     break;
 
                 case 0:
-                    System.out.println("Encerrando Sistema");
-
+                    // Sair do sistema
+                    System.out.println("Encerrando sistema...");
                     break;
 
                 default:
-                    System.out.println("Opação invalida");
-
+                    System.out.println("Opção inválida.");
             }
 
+        } while (opcao != 0);
 
-        }
-        while (opcao != 0);
         scanner.close();
-
-
     }
 }
-
-
-
