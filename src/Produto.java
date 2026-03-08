@@ -1,10 +1,11 @@
 public class Produto {
 
-    int id;
-    String nome;
-    double preco;
-    int quantidade;
+    private int id;
+    private String nome;
+    private double preco;
+    private int quantidade;
 
+    // Construtores
     public Produto(int id, String nome, double preco, int quantidade) {
         this.id = id;
         this.nome = nome;
@@ -12,6 +13,7 @@ public class Produto {
         this.quantidade = quantidade;
     }
 
+    // Getters e Setters
     public int getId() {
         return id;
     }

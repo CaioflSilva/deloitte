@@ -2,12 +2,14 @@ import java.util.ArrayList;
 
 public class Estoque {
 
-   public ArrayList<Produto> produtos = new ArrayList<>();
+    public ArrayList<Produto> produtos = new ArrayList<>();
 
+    // Adicionar produto
     public void adicionarProduto(Produto produto) {
         produtos.add(produto);
     }
 
+    // Listar produtos
     public void listarProdutos() {
         if (produtos.isEmpty()) {
             System.out.println("Estoque vazio.");
@@ -18,15 +20,17 @@ public class Estoque {
         }
     }
 
+    // Remover produto
     public void removerProduto(int indice) {
         if (indice >= 0 && indice < produtos.size()) {
             produtos.remove(indice);
             System.out.println("Produto removido!");
         } else {
-            System.out.println("Índice inválido");
+            System.out.println("Índice inválido.");
         }
     }
 
+    // Alterar produto
     public void alterarProduto(int indice, String novoNome, double novoPreco, int novaQuantidade) {
         if (indice >= 0 && indice < produtos.size()) {
             Produto produto = produtos.get(indice);
