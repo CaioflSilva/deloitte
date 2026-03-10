@@ -1,3 +1,5 @@
+package com.deloitte.projeto_estoque.exception;
+
 public class ExcecaoPersonalizada extends RuntimeException {
 
     // Construtor com mensagem

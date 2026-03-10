@@ -1,3 +1,7 @@
+package com.deloitte.projeto_estoque.ultil;
+
+import com.deloitte.projeto_estoque.model.Produto;
+
 import java.util.ArrayList;
 
 public class Estoque {

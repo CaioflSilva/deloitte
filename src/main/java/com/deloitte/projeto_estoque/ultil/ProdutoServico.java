@@ -1,7 +1,11 @@
+package com.deloitte.projeto_estoque.ultil;
 
-    public class ProdutoServico {
+import com.deloitte.projeto_estoque.model.Produto;
+import com.deloitte.projeto_estoque.exception.ExcecaoPersonalizada;
 
-        private Estoque estoque;
+public class ProdutoServico {
+
+       public Estoque estoque;
 
 
         public ProdutoServico(Estoque estoque) {
