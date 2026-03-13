@@ -4,34 +4,55 @@ import com.deloitte.projeto_estoque.model.Produto;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Repository
-public class ProdutoRepository {
+public class ProdutoRepository implements IProdutoRepository {
 
-    private final Map<Integer, Produto> banco = new LinkedHashMap<>();
+    private final List<Produto> produtos = new ArrayList<>();
 
+    @Override
     public Produto salvar(Produto produto) {
-        banco.put(produto.getId(), produto);
+        produtos.add(produto);
         return produto;
     }
 
+    @Override
     public List<Produto> listarTodos() {
-        return new ArrayList<>(banco.values());
+        return new ArrayList<>(produtos);
     }
 
-    public Optional<Produto> buscarPorId(Integer id) {
-        return Optional.ofNullable(banco.get(id));
+    @Override
+    public Produto buscarPorId(Long id) {
+        for (Produto produto : produtos) {
+            if (produto.getId().equals(id)) {
+                return produto;
+            }
+        }
+        return null;
     }
 
-    public boolean existePorId(Integer id) {
-        return banco.containsKey(id);
+    @Override
+    public Produto atualizar(Long id, Produto novoProduto) {
+        for (Produto produto : produtos) {
+            if (produto.getId().equals(id)) {
+                produto.setNome(novoProduto.getNome());
+                produto.setDescricao(novoProduto.getDescricao());
+                produto.setPreco(novoProduto.getPreco());
+                produto.setQuantidade(novoProduto.getQuantidade());
+                return produto;
+            }
+        }
+        return null;
     }
 
-    public void remover(Integer id) {
-        banco.remove(id);
+    @Override
+    public void remover(Long id) {
+        produtos.removeIf(p -> p.getId().equals(id));
+    }
+
+    @Override
+    public boolean existePorId(Long id) {
+        return buscarPorId(id) != null;
     }
 }

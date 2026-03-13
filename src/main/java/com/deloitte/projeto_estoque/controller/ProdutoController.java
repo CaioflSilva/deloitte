@@ -2,6 +2,7 @@ package com.deloitte.projeto_estoque.controller;
 
 import com.deloitte.projeto_estoque.model.Produto;
 import com.deloitte.projeto_estoque.service.ProdutoService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class ProdutoController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Produto cadastrar(@RequestBody Produto produto) {
         return produtoService.cadastrar(produto);
     }
@@ -27,17 +29,18 @@ public class ProdutoController {
     }
 
     @GetMapping("/{id}")
-    public Produto buscarPorId(@PathVariable Integer id) {
+    public Produto buscarPorId(@PathVariable Long id) {
         return produtoService.buscarPorId(id);
     }
 
     @PutMapping("/{id}")
-    public Produto atualizar(@PathVariable Integer id, @RequestBody Produto produto) {
+    public Produto atualizar(@PathVariable Long id, @RequestBody Produto produto) {
         return produtoService.atualizar(id, produto);
     }
 
     @DeleteMapping("/{id}")
-    public void remover(@PathVariable Integer id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void remover(@PathVariable Long id) {
         produtoService.remover(id);
     }
 }

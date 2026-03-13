@@ -1,28 +1,25 @@
 package com.deloitte.projeto_estoque.service;
 
-import com.deloitte.projeto_estoque.exception.ExcecaoPersonalizada;
+import com.deloitte.projeto_estoque.exception.RecursoNaoEncontradoException;
 import com.deloitte.projeto_estoque.model.Produto;
-import com.deloitte.projeto_estoque.repository.ProdutoRepository;
-import org.springframework.http.HttpStatus;
+import com.deloitte.projeto_estoque.repository.IProdutoRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class ProdutoService {
 
-    private final ProdutoRepository produtoRepository;
-    private final AtomicInteger sequenciaId = new AtomicInteger(1);
+    private final IProdutoRepository produtoRepository;
+    private final ProdutoValidator produtoValidator;
 
-    public ProdutoService(ProdutoRepository produtoRepository) {
+    public ProdutoService(IProdutoRepository produtoRepository, ProdutoValidator produtoValidator) {
         this.produtoRepository = produtoRepository;
+        this.produtoValidator = produtoValidator;
     }
 
     public Produto cadastrar(Produto produto) {
-        validarProduto(produto);
-        produto.setId(sequenciaId.getAndIncrement());
+        produtoValidator.validar(produto);
         return produtoRepository.salvar(produto);
     }
 
@@ -30,45 +27,28 @@ public class ProdutoService {
         return produtoRepository.listarTodos();
     }
 
-    public Produto buscarPorId(Integer id) {
-        return produtoRepository.buscarPorId(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado."));
+    public Produto buscarPorId(Long id) {
+        Produto produto = produtoRepository.buscarPorId(id);
+        if (produto == null) {
+            throw new RecursoNaoEncontradoException("Produto não encontrado.");
+        }
+        return produto;
     }
 
-    public Produto atualizar(Integer id, Produto produtoAtualizado) {
-        validarProduto(produtoAtualizado);
-
-        Produto produtoExistente = buscarPorId(id);
-        produtoExistente.setNome(produtoAtualizado.getNome());
-        produtoExistente.setPreco(produtoAtualizado.getPreco());
-        produtoExistente.setQuantidade(produtoAtualizado.getQuantidade());
-
-        return produtoRepository.salvar(produtoExistente);
-    }
-
-    public void remover(Integer id) {
+    public Produto atualizar(Long id, Produto produto) {
         if (!produtoRepository.existePorId(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado.");
+            throw new RecursoNaoEncontradoException("Produto não encontrado.");
+        }
+
+        produtoValidator.validar(produto);
+        return produtoRepository.atualizar(id, produto);
+    }
+
+    public void remover(Long id) {
+        if (!produtoRepository.existePorId(id)) {
+            throw new RecursoNaoEncontradoException("Produto não encontrado.");
         }
 
         produtoRepository.remover(id);
-    }
-
-    private void validarProduto(Produto produto) {
-        if (produto == null) {
-            throw new ExcecaoPersonalizada("O produto não pode ser nulo.");
-        }
-
-        if (produto.getNome() == null || produto.getNome().isBlank()) {
-            throw new ExcecaoPersonalizada("O nome do produto é obrigatório.");
-        }
-
-        if (produto.getPreco() == null || produto.getPreco() <= 0) {
-            throw new ExcecaoPersonalizada("O preço do produto deve ser maior que zero.");
-        }
-
-        if (produto.getQuantidade() == null || produto.getQuantidade() < 0) {
-            throw new ExcecaoPersonalizada("A quantidade do produto não pode ser negativa.");
-        }
     }
 }

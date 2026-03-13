@@ -1,4 +1,4 @@
-package com.deloitte.projeto_estoque.ultil;
+package com.deloitte.projeto_estoque.console;
 
 import com.deloitte.projeto_estoque.model.Produto;
 
