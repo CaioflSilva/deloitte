@@ -1,8 +1,19 @@
 package com.deloitte.projeto_estoque.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Produto {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+
+
     private String nome;
     private String descricao;
     private Double preco;
@@ -10,6 +21,8 @@ public class Produto {
 
     public Produto() {
     }
+
+
 
     public Produto(Long id, String nome, String descricao, Double preco, Integer quantidade) {
         this.id = id;

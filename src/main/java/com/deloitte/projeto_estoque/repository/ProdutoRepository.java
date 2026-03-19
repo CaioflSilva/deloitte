@@ -10,9 +10,11 @@ import java.util.List;
 public class ProdutoRepository implements IProdutoRepository {
 
     private final List<Produto> produtos = new ArrayList<>();
+    private long nextId = 1;
 
     @Override
     public Produto salvar(Produto produto) {
+        produto.setId(nextId++);
         produtos.add(produto);
         return produto;
     }
